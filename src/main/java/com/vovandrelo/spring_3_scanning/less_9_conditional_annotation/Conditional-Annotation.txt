@@ -1,0 +1,27 @@
+Аннотация @Conditional является частью механизма условной регистрации компонентов. Она позволяет регистрировать bean-ы,
+конфигурационные классы, @Bean-методы и даже целые модули конфигурации только в том случае, если выполняется
+определенное условие.
+
+Когда вы помечаете класс или метод аннотацией @Conditional, вы должны указать реализацию интерфейса Condition. Этот
+интерфейс определяет один метод matches, который должен вернуть true или false в зависимости от того, должен ли
+компонент быть создан.
+
+Создание условия:
+public class SomeCondition implements Condition {
+    @Override
+    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
+        // Здесь ваша логика для проверки условия
+        return true; // Если условие выполняется
+    }
+}
+
+Применение условия:
+@Configuration
+@Conditional(SomeCondition.class)
+public class SomeConfiguration {
+    // Этот конфигурационный класс будет зарегистрирован только если SomeCondition.matches() возвращает true
+}
+
+Spring также предоставляет несколько встроенных реализаций Condition, таких, как: @ConditionalOnClass,
+@ConditionalOnBean, @ConditionalOnMissingBean, @ConditionalOnProperty и другие, которые позволяют регистрировать
+компоненты на основе наличия классов, бинов, свойств и т.д.
